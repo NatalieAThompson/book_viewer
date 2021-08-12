@@ -22,9 +22,8 @@ end
 get "/chapter/1" do
   @title = "Chapter 1"
   load_contents
-  @chapter1 = File.read("data/chp1.txt")
-  @chapter1.split(\n\n)
-
+  @chapter = File.read("data/chp1.txt").split("\n\n")
+  p @chapter
   erb :chapter
 end
 
