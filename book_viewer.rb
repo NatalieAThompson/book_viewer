@@ -2,28 +2,33 @@ require "sinatra"
 require "sinatra/reloader"
 require "tilt/erubis"
 
-def load_contents
+before do
   @contents = File.readlines("data/toc.txt")
-  @contents
+end
+
+helpers do
+  def in_paragraphs(array)
+    array.map do |paragraph|
+      "<p>" + paragraph.delete("\n") + "</p>"
+    end.join
+  end
+end
+
+not_found do
+  redirect "/"
 end
 
 get "/" do
-  load_contents
-  erb :home
+  @title = "Book Viewer"
 
-end
-
-get "/:something" do |n|
-  @title = n
-  load_contents
   erb :home
 end
 
-get "/chapter/1" do
-  @title = "Chapter 1"
-  load_contents
-  @chapter = File.read("data/chp1.txt").split("\n\n")
-  p @chapter
+get "/chapter/:number" do |number|
+  redirect "/" unless (1..@contents.size).include? number
+  @title = "Chapter #{number}: #{@contents[number.to_i - 1]}"
+  @chapter = File.read("data/chp#{number}.txt").split("\n\n")
+
   erb :chapter
 end
 
