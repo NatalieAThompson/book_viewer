@@ -9,16 +9,17 @@
 <% if @chapters.empty? && @search_term %>
   <p>Sorry, no matches were found</p>
 <% elsif @search_term %>
+  <h2 class="content-subhead"> Results for '<%= @search_term %>' </h2>
   <ul>
     <% @book.each do |key, value| %>
       <% next unless value[:selected] %>
       <li>
-        <%= key %>
+        <h3><%= key %></h3>
         <ul>
           <% value[:paragraphs].each do |key2, value2| %>
           <li>
-            <a href="/chapter/<%= value[:number] %>#<%= key2 %>"> %>
-              <%= value2 %>
+            <a href="/chapter/<%= value[:number] %>#<%= key2 %>">
+              <%= bold_word(value2, @search_term) %>
             </a>
           </li>
           <% end %>

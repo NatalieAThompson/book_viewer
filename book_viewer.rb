@@ -13,6 +13,10 @@ helpers do
       "<p id=\"a#{index}\">" + paragraph + "</p>"
     end.join
   end
+
+  def bold_word(para, word_to_bold)
+    para.gsub!(word_to_bold, "<strong>#{word_to_bold}</strong>")
+  end
 end
 
 not_found do
