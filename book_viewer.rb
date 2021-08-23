@@ -41,11 +41,9 @@ get "/search" do
   @chapters = Dir.children("data")
   @chapters.delete("toc.txt")
 
-  # p @chapters
   @chapters.sort_by! do |title|
     title.delete("^0123456789").to_i
   end
-  # p @chapters
 
   @search_term = params[:query] || false
 
@@ -57,14 +55,15 @@ get "/search" do
 
   @chapters.select! do |file|
     File.read("data/" + file).include?(params[:query]) if params[:query]
-  end.map! do |file|
-    file.delete('^0123456789')
   end
 
-  # p @chapters
+  unless @chapters.empty?
+    @chapters.map! do |file|
+      file.delete('^0123456789')
+    end
+  end
 
   # p @paragraphs #a nested array of chapters with the matching word. Each array element lines up with the @chapter_names array
-  # p @chapters
   #loop through books if value[:number] is found in @chapters selected = true; if selected is true then add paragraphs.
   if @search_term
     @book.each do |key, value|
@@ -103,13 +102,6 @@ get "/search" do
         #add it to the paragraphs hash
           #The hash key should be the id attribute value
           #The value should be the paragraph text formated properly
-
-
-
-
-  # @chapter_names = @chapters.map do |num|
-  #   @contents[num.to_i - 1]
-  # end
 
   erb :search
 end
